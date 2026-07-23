@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anomalia 01 — Follow-up pós-encerramento sem resposta · BOT Betnacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1a2332; --muted:#5b6b7f; --line:#e3e8ef; --bg:#f7f9fc; --card:#ffffff;
+    --red:#c0392b; --red-bg:#fdf0ee; --amber:#9a6700; --amber-bg:#fff8e6;
+    --green:#1a7f4b; --green-bg:#eafaf1; --blue:#1f5fbf; --blue-bg:#eef4fd;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding:32px 16px}
+  .wrap{max-width:980px;margin:0 auto}
+  .mono{font-family:'IBM Plex Mono',Consolas,monospace}
+  header{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:28px 32px;margin-bottom:16px}
+  h1{font-size:22px;font-weight:800;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:13px;margin-top:6px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:.05em;margin-right:6px}
+  .b-amber{background:var(--amber-bg);color:var(--amber)}
+  .b-green{background:var(--green-bg);color:var(--green)}
+  .b-red{background:var(--red-bg);color:var(--red)}
+  .b-blue{background:var(--blue-bg);color:var(--blue)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px 32px;margin-bottom:16px}
+  h2{font-size:15px;font-weight:700;margin-bottom:12px;letter-spacing:-.01em}
+  h3{font-size:13px;font-weight:700;margin:16px 0 8px}
+  p{font-size:14px;margin-bottom:10px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+  .kpi{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--bg)}
+  .kpi .v{font-family:'IBM Plex Mono',Consolas,monospace;font-size:26px;font-weight:600;letter-spacing:-.02em}
+  .kpi .l{font-size:11.5px;color:var(--muted);margin-top:2px}
+  ol,ul{padding-left:22px;font-size:14px}
+  li{margin-bottom:6px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--line)}
+  td{padding:7px 10px;border-bottom:1px solid var(--line)}
+  td.mono, .mono td{font-family:'IBM Plex Mono',Consolas,monospace;font-size:12.5px}
+  .note{border-left:3px solid var(--blue);background:var(--blue-bg);padding:12px 16px;border-radius:0 8px 8px 0;font-size:13.5px;margin:12px 0}
+  .warn{border-left:3px solid var(--amber);background:var(--amber-bg);padding:12px 16px;border-radius:0 8px 8px 0;font-size:13.5px;margin:12px 0}
+  .ok{border-left:3px solid var(--green);background:var(--green-bg);padding:12px 16px;border-radius:0 8px 8px 0;font-size:13.5px;margin:12px 0}
+  .bad{border-left:3px solid var(--red);background:var(--red-bg);padding:12px 16px;border-radius:0 8px 8px 0;font-size:13.5px;margin:12px 0}
+  .bar{display:flex;align-items:center;gap:8px;font-size:12.5px;margin-bottom:3px}
+  .bar .d{font-family:'IBM Plex Mono',Consolas,monospace;width:60px;color:var(--muted)}
+  .bar .n{font-family:'IBM Plex Mono',Consolas,monospace;width:30px;text-align:right;font-weight:600}
+  .bar .b{height:11px;background:var(--red);border-radius:3px;opacity:.85}
+  .bar .b0{height:11px;background:var(--green);border-radius:3px;opacity:.7}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:760px){.cols{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="badge b-red">Regressão ativa desde 29/06</span>
+  <span class="badge b-blue">Escalação ao fornecedor pronta</span>
+  <h1>Anomalia 01 — Follow-up pós-encerramento sem resposta</h1>
+  <div class="sub">"Cliente finalizou atendimento, enviou uma nova mensagem e não recebeu resposta." O bot atende ponta a ponta, a conversa encerra (BSAT ou inatividade), o cliente escreve de novo segundos depois — e o novo ticket fica no vazio: sem menu, sem welcome, sem resposta alguma.<br>
+  Atualizado em 22/07/2026 · Fonte: censo do ticket-pai via API Zendesk (read-only) + Data Export Ultimate · Projeto Métricas BOT Betnacional</div>
+</header>
+
+<section>
+  <h2>Mecânica da anomalia (caso real: Douglas, #2858604 → #2858616)</h2>
+  <ol>
+    <li>Cliente é atendido normalmente pelo Advanced AI, ponta a ponta — no caso, até responder o BSAT (21/07 18:43→18:46).</li>
+    <li>Ao concluir (nota dada ou 15min de inatividade), o nó terminal aplica <span class="mono">resolvido_ia</span> e o gatilho "Resolvidos IA" <strong>fecha o ticket</strong> na marca BOT.</li>
+    <li>O cliente responde na <strong>mesma conversa do widget</strong> segundos depois ("De nda", 18:47 — gap de 7s do fechamento).</li>
+    <li>Como o ticket anterior fechou, o Zendesk cria um <strong>novo ticket</strong> na mesma conversa, atribuído ao usuário "AI Agent".</li>
+    <li><strong>O bot nunca reengaja:</strong> nenhuma resposta, nenhum menu, nenhuma tag de diálogo (sem <span class="mono">advanced_ia</span>, sem <span class="mono">welcome_entrada</span>). O ticket morre por automação sem ninguém ver.</li>
+  </ol>
+  <div class="note"><strong>Comportamento esperado:</strong> mesmo com o atendimento anterior encerrado corretamente, uma nova mensagem deve abrir novo ticket <em>e o bot deve reengajar com o menu inicial</em>, como uma nova iteração. Era o que acontecia até 28/06 (falhas raras, ~1/dia).</div>
+</section>
+
+<section>
+  <h2>Números</h2>
+  <div class="kpis">
+    <div class="kpi"><div class="v">817</div><div class="l">JULHO 01–21 — follow-ups órfãos (93,1% dos 878 órfãos limpos)</div></div>
+    <div class="kpi"><div class="v">905</div><div class="l">clientes desde a regressão (29/06–21/07) · ~39/dia</div></div>
+    <div class="kpi"><div class="v">92,7%</div><div class="l">têm ticket-pai encerrado no BSAT (759/819 em julho)</div></div>
+    <div class="kpi"><div class="v">15s</div><div class="l">gap mediano entre fechar o pai e o cliente escrever de novo</div></div>
+  </div>
+  <div class="cols">
+    <div>
+      <h3>Perfil do ticket-pai (o atendimento que encerrou)</h3>
+      <table>
+        <tr><th>Encerramento do pai</th><th>Jun</th><th>Jul</th></tr>
+        <tr><td>BSAT respondido (<span class="mono">bsat_saida</span>)</td><td class="mono">113</td><td class="mono">759 (92,7%)</td></tr>
+        <tr><td>Inatividade (<span class="mono">conversa_inativa</span>)</td><td class="mono">2</td><td class="mono">60 (7,3%)</td></tr>
+        <tr><td>Transferência (<span class="mono">transferencia_saida</span>)</td><td class="mono">5</td><td class="mono">0</td></tr>
+      </table>
+      <p style="font-size:13px">O caso típico é o cliente que <strong>acabou de avaliar bem o atendimento</strong> e emenda um "obrigado"/"de nada" — ou volta com um problema novo — e cai no vazio. Gap: 78,6% ≤ 30s; 99,8% ≤ 2min.</p>
+      <h3>Destino dos tickets órfãos (julho)</h3>
+      <p class="mono" style="font-size:13px">584 closed · 115 solved · 120 open</p>
+      <p style="font-size:13px">A automação fecha com o tempo — <strong>nenhum foi atendido</strong>.</p>
+    </div>
+    <div>
+      <h3>Série diária (28/06 → 21/07)</h3>
+      <div class="bar"><span class="d">28/06</span><span class="n">0</span><span class="b0" style="width:2px"></span></div>
+      <div class="bar"><span class="d">29/06</span><span class="n">36</span><span class="b" style="width:108px"></span></div>
+      <div class="bar"><span class="d">30/06</span><span class="n">52</span><span class="b" style="width:156px"></span></div>
+      <div class="bar"><span class="d">01/07</span><span class="n">62</span><span class="b" style="width:186px"></span></div>
+      <div class="bar"><span class="d">02/07</span><span class="n">50</span><span class="b" style="width:150px"></span></div>
+      <div class="bar"><span class="d">03/07</span><span class="n">52</span><span class="b" style="width:156px"></span></div>
+      <div class="bar"><span class="d">04/07</span><span class="n">64</span><span class="b" style="width:192px"></span></div>
+      <div class="bar"><span class="d">05/07</span><span class="n">64</span><span class="b" style="width:192px"></span></div>
+      <div class="bar"><span class="d">06/07</span><span class="n">41</span><span class="b" style="width:123px"></span></div>
+      <div class="bar"><span class="d">07/07</span><span class="n">48</span><span class="b" style="width:144px"></span></div>
+      <div class="bar"><span class="d">08/07</span><span class="n">33</span><span class="b" style="width:99px"></span></div>
+      <div class="bar"><span class="d">09/07</span><span class="n">32</span><span class="b" style="width:96px"></span></div>
+      <div class="bar"><span class="d">10/07</span><span class="n">28</span><span class="b" style="width:84px"></span></div>
+      <div class="bar"><span class="d">11/07</span><span class="n">35</span><span class="b" style="width:105px"></span></div>
+      <div class="bar"><span class="d">12/07</span><span class="n">46</span><span class="b" style="width:138px"></span></div>
+      <div class="bar"><span class="d">13/07</span><span class="n">26</span><span class="b" style="width:78px"></span></div>
+      <div class="bar"><span class="d">14/07</span><span class="n">31</span><span class="b" style="width:93px"></span></div>
+      <div class="bar"><span class="d">15/07</span><span class="n">37</span><span class="b" style="width:111px"></span></div>
+      <div class="bar"><span class="d">16/07</span><span class="n">27</span><span class="b" style="width:81px"></span></div>
+      <div class="bar"><span class="d">17/07</span><span class="n">19</span><span class="b" style="width:57px"></span></div>
+      <div class="bar"><span class="d">18/07</span><span class="n">26</span><span class="b" style="width:78px"></span></div>
+      <div class="bar"><span class="d">19/07</span><span class="n">50</span><span class="b" style="width:150px"></span></div>
+      <div class="bar"><span class="d">20/07</span><span class="n">23</span><span class="b" style="width:69px"></span></div>
+      <div class="bar"><span class="d">21/07</span><span class="n">23</span><span class="b" style="width:69px"></span></div>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:6px">Junho 01–28 inteiro = 32 casos (~1,1/dia, verde = baseline). O salto de 29/06 é abrupto e sustentado; o volume acompanha o volume do canal.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>O que o censo do ticket-pai provou (22/07)</h2>
+  <p>Para <strong>cada um</strong> dos 1.143 órfãos de jun+jul (idade ≥ 24h), buscamos o ticket anterior do mesmo requester via API:</p>
+  <ul>
+    <li><strong>93% dos órfãos de julho têm ticket-pai com <span class="mono">advanced_ia</span> fechado ≤ 15 min antes</strong> (819 de 881) — na prática, segundos antes (mediana 15s).</li>
+    <li>Distribuição bimodal perfeita: ou o pai fechou <strong>≤ 2 min antes</strong> (99,8% dos follow-ups), ou o ticket anterior é de <strong>meses atrás</strong> (Anomalia 02). Não existe meio-termo — a assinatura é inequívoca.</li>
+    <li>Os 5 exemplos do pacote de escalação antigo (#2858616, #2858697, #2858736, #2858787, #2854009) são <strong>todos</strong> follow-up pós-BSAT — gap de 4 a 19s.</li>
+  </ul>
+  <div class="bad"><strong>Correção de diagnóstico (22/07):</strong> a escalação anterior descrevia os órfãos como "conversa nova que nunca chegou ao AI agent". Errado em 93% dos casos: a conversa CHEGOU e foi atendida — o que não existe é o <strong>reengajamento</strong> quando o cliente volta a escrever após o encerramento. O pacote antigo foi arquivado; o novo (nesta pasta) descreve a mecânica correta.</div>
+  <div class="note"><strong>Evidência do Data Export (Ultimate):</strong> nas 23.020 conversas de 15–21/07 não há nenhuma com <span class="mono">bot_messages_count = 0</span> — e os follow-ups órfãos não geram conversa nova no motor. Ou seja: <strong>o motor do bot nunca fica sabendo da nova mensagem</strong>. A falha está no ciclo de vida da conversa pós-encerramento (plataforma AI agent / ponte Sunshine), não dentro dos fluxos.</div>
+  <h3>Variante com auto-tags (mesma anomalia)</h3>
+  <p style="font-size:13.5px">Casos como #2828731 e #2835356 recebem <span class="mono">intent__*</span>/<span class="mono">sentiment__*</span> (ex.: <span class="mono">sentiment__very_negative</span>) mas nenhuma resposta: são os <strong>mesmos follow-ups órfãos</strong> "iluminados" pelo auto-triage nativo do Zendesk, ligado gradualmente a partir de ~09/07. Em julho, 445/817 (54,5%) têm auto-tags. Não é outra anomalia — é atributo.</p>
+</section>
+
+<section>
+  <h2>Exemplos para conferência no Zendesk (órfão → ticket-pai)</h2>
+  <h3>Julho (20 mais recentes)</h3>
+  <table class="mono">
+    <tr><th>Órfão</th><th>Criado (UTC)</th><th>Status</th><th>Pai</th><th>Gap</th><th>Pai encerrou por</th></tr>
+    <tr><td>2859067</td><td>22/07 00:24</td><td>open</td><td>2859063</td><td>54s</td><td>BSAT</td></tr>
+    <tr><td>2859044</td><td>22/07 00:15</td><td>open</td><td>2858990</td><td>73s</td><td>inatividade</td></tr>
+    <tr><td>2858787</td><td>21/07 22:50</td><td>open</td><td>2858779</td><td>19s</td><td>BSAT</td></tr>
+    <tr><td>2858736</td><td>21/07 22:29</td><td>open</td><td>2858730</td><td>16s</td><td>BSAT</td></tr>
+    <tr><td>2858697</td><td>21/07 22:13</td><td>open</td><td>2858685</td><td>12s</td><td>BSAT</td></tr>
+    <tr><td>2858616</td><td>21/07 21:47</td><td>open</td><td>2858604</td><td>7s</td><td>BSAT (caso Douglas)</td></tr>
+    <tr><td>2858540</td><td>21/07 21:15</td><td>open</td><td>2858538</td><td>19s</td><td>BSAT</td></tr>
+    <tr><td>2858460</td><td>21/07 20:45</td><td>open</td><td>2858401</td><td>35s</td><td>inatividade</td></tr>
+    <tr><td>2858370</td><td>21/07 20:21</td><td>open</td><td>2858367</td><td>21s</td><td>BSAT</td></tr>
+    <tr><td>2858327</td><td>21/07 20:07</td><td>open</td><td>2858313</td><td>52s</td><td>BSAT</td></tr>
+    <tr><td>2858276</td><td>21/07 19:48</td><td>open</td><td>2858243</td><td>48s</td><td>BSAT</td></tr>
+    <tr><td>2858138</td><td>21/07 18:55</td><td>open</td><td>2858135</td><td>22s</td><td>BSAT</td></tr>
+    <tr><td>2857994</td><td>21/07 18:04</td><td>open</td><td>2857982</td><td>11s</td><td>BSAT</td></tr>
+    <tr><td>2857937</td><td>21/07 17:49</td><td>open</td><td>2857924</td><td>16s</td><td>BSAT</td></tr>
+    <tr><td>2857912</td><td>21/07 17:45</td><td>open</td><td>2857902</td><td>18s</td><td>BSAT</td></tr>
+    <tr><td>2857835</td><td>21/07 17:17</td><td>open</td><td>2857814</td><td>7s</td><td>BSAT</td></tr>
+    <tr><td>2857757</td><td>21/07 16:54</td><td>open</td><td>2857738</td><td>13s</td><td>BSAT</td></tr>
+    <tr><td>2857718</td><td>21/07 16:42</td><td>open</td><td>2857710</td><td>6s</td><td>BSAT</td></tr>
+    <tr><td>2856853</td><td>21/07 11:35</td><td>open</td><td>2856821</td><td>45s</td><td>BSAT</td></tr>
+    <tr><td>2856812</td><td>21/07 11:19</td><td>open</td><td>2856778</td><td>59s</td><td>inatividade</td></tr>
+  </table>
+  <h3>Casos citados pelo Dono (variante com auto-tags) + caso índice</h3>
+  <table class="mono">
+    <tr><th>Órfão</th><th>Criado (UTC)</th><th>Pai</th><th>Gap</th><th>Observação</th></tr>
+    <tr><td>2828731</td><td>12/07 17:40</td><td>2828728</td><td>3s</td><td>intent__finance + sentiment__very_negative, sem resposta</td></tr>
+    <tr><td>2835356</td><td>15/07 00:25</td><td>2835350</td><td>5s</td><td>pai bem avaliado segundos antes</td></tr>
+    <tr><td>2854009</td><td>20/07 13:32</td><td>2854008</td><td>4s</td><td>caso índice (o 1º par identificado)</td></tr>
+  </table>
+  <p style="font-size:12.5px;color:var(--muted)">Listas completas (metadados, sem PII): <span class="mono">anomalia-01_followup_2026-06.csv</span> (120) · <span class="mono">anomalia-01_followup_2026-07.csv</span> (819, inclui 22/07 parcial). Junho tem 88 casos em 29–30/06 — a regressão começou dentro de junho.</p>
+</section>
+
+<section>
+  <h2>Causa raiz e estado</h2>
+  <div class="warn"><strong>Causa raiz: NÃO fechada do nosso lado — escalar ao fornecedor.</strong> O audit log do Zendesk (24/06–02/07) não mostra nenhuma mudança de configuração nossa perto de 29/06. As suspeitas são do lado da plataforma: (a) ciclo de vida da conversa no AI agent após o encerramento pelo fluxo (BSAT/inatividade) — o bot "dá a conversa por morta" e ignora mensagens novas; (b) interação com a config do widget "Permitir que os clientes iniciem várias conversas". A investigação interna esgotou: audit limpo + zero rastro no Data Export.</div>
+  <h3>Ações</h3>
+  <ul>
+    <li><strong>Escalar</strong>: pacote novo nesta pasta (<span class="mono">ESCALACAO_FORNECEDOR_anomalia-01-follow-up.md</span>) — abrir ticket no suporte Zendesk (AI agents - Advanced).</li>
+    <li><strong>Conferir no console</strong>: aba "Registro de alterações" do AI agent em 28–30/06 (e ~09/07, quando o auto-triage ligou).</li>
+    <li><strong>Monitorar</strong>: censo diário (idade ≥ 24h) — <span class="mono">integracao/censo_pais_orfaos.py</span>.</li>
+    <li><strong>⏳ Teste pendente</strong>: medir se ainda EXISTE follow-up que reengaja (novo ticket <em>com</em> <span class="mono">advanced_ia</span> ≤15min após pai fechado). Zero desde 29/06 = falha total; alguns = intermitente.</li>
+  </ul>
+</section>
+
+<footer>Anomalia 01 · Projeto Métricas BOT Betnacional · gerado em 22/07/2026 · censo: API Zendesk read-only + Data Export Ultimate (contagem oficial: Genie/Databricks)</footer>
+</div>
+</body>
+</html>
