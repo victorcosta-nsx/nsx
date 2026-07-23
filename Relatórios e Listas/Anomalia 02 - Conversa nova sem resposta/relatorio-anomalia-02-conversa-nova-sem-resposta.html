@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anomalia 02 — Conversa nova sem resposta · BOT Betnacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1a2332; --muted:#5b6b7f; --line:#e3e8ef; --bg:#f7f9fc; --card:#ffffff;
+    --red:#c0392b; --red-bg:#fdf0ee; --amber:#9a6700; --amber-bg:#fff8e6;
+    --green:#1a7f4b; --green-bg:#eafaf1; --blue:#1f5fbf; --blue-bg:#eef4fd;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding:32px 16px}
+  .wrap{max-width:980px;margin:0 auto}
+  .mono{font-family:'IBM Plex Mono',Consolas,monospace}
+  header{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:28px 32px;margin-bottom:16px}
+  h1{font-size:22px;font-weight:800;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:13px;margin-top:6px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:.05em;margin-right:6px}
+  .b-amber{background:var(--amber-bg);color:var(--amber)}
+  .b-green{background:var(--green-bg);color:var(--green)}
+  .b-red{background:var(--red-bg);color:var(--red)}
+  .b-blue{background:var(--blue-bg);color:var(--blue)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px 32px;margin-bottom:16px}
+  h2{font-size:15px;font-weight:700;margin-bottom:12px;letter-spacing:-.01em}
+  h3{font-size:13px;font-weight:700;margin:16px 0 8px}
+  p{font-size:14px;margin-bottom:10px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+  .kpi{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--bg)}
+  .kpi .v{font-family:'IBM Plex Mono',Consolas,monospace;font-size:26px;font-weight:600;letter-spacing:-.02em}
+  .kpi .l{font-size:11.5px;color:var(--muted);margin-top:2px}
+  ol,ul{padding-left:22px;font-size:14px}
+  li{margin-bottom:6px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--line)}
+  td{padding:7px 10px;border-bottom:1px solid var(--line)}
+  td.mono, .mono td{font-family:'IBM Plex Mono',Consolas,monospace;font-size:12.5px}
+  .note{border-left:3px solid var(--blue);background:var(--blue-bg);padding:12px 16px;border-radius:0 8px 8px 0;font-size:13.5px;margin:12px 0}
+  .warn{border-left:3px solid var(--amber);background:var(--amber-bg);padding:12px 16px;border-radius:0 8px 8px 0;font-size:13.5px;margin:12px 0}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:760px){.cols{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="badge b-amber">Baseline antiga — ~3/dia, estável</span>
+  <span class="badge b-blue">Não é a regressão de 29/06</span>
+  <h1>Anomalia 02 — Conversa nova sem resposta (silêncio verdadeiro)</h1>
+  <div class="sub">Cliente <strong>sem nenhum atendimento recente</strong> abre uma conversa no widget e não recebe resposta alguma — nem bot, nem formulário, nem humano. É o "órfão clássico": a conversa nunca é entregue ao motor do AI agent.<br>
+  Atualizado em 22/07/2026 · Fonte: censo do ticket-pai via API Zendesk (read-only) + Data Export Ultimate · Projeto Métricas BOT Betnacional</div>
+</header>
+
+<section>
+  <h2>Definição e separação da Anomalia 01</h2>
+  <p>No censo dos 1.143 órfãos de jun+jul (idade ≥ 24h), esta categoria reúne os que <strong>não têm nenhum ticket anterior do mesmo requester</strong> (subtipo <span class="mono">sem_ticket_anterior</span>) ou cujo ticket anterior é de <strong>meses atrás</strong>, sem relação (subtipo <span class="mono">pai_antigo_meses</span> — gaps de 2 a 34 milhões de segundos). Sem o padrão "encerrou → escreveu de novo em segundos" da Anomalia 01.</p>
+  <div class="note"><strong>Aqui o diagnóstico original vale:</strong> a conversa nova <strong>não chega ao motor do bot</strong> (Data Export 15–21/07: 23.020 conversas, zero com <span class="mono">bot_messages_count = 0</span> — as órfãs simplesmente não existem lá). Falha de entrega Widget/Sunshine → AI agent, intermitente (~0,1–0,2% do canal), presente desde o rollout.</div>
+</section>
+
+<section>
+  <h2>Números</h2>
+  <div class="kpis">
+    <div class="kpi"><div class="v">61</div><div class="l">JULHO 01–21 (~2,9/dia — 6,9% dos órfãos limpos)</div></div>
+    <div class="kpi"><div class="v">142</div><div class="l">JUNHO (inclui pico de 22 em 11/06 — mini-incidente)</div></div>
+    <div class="kpi"><div class="v">0</div><div class="l">salto em 29/06 — a série NÃO muda com a regressão da An. 01</div></div>
+  </div>
+  <div class="cols">
+    <div>
+      <h3>Comportamento da série</h3>
+      <ul style="font-size:13.5px">
+        <li>Junho: ~3–5/dia, com <strong>pico isolado de 22 em 11/06</strong> (mini-incidente já identificado — 19 fechados "bare" naquele dia).</li>
+        <li>Julho: 1–6/dia, sem tendência. Dias 09/07 e 22/07 quase zerados.</li>
+        <li>É a mesma taxa de falha de sempre (~0,18% pré-29/06) — o que saltou em 29/06 foi a Anomalia 01, não esta.</li>
+      </ul>
+      <h3>Status (julho)</h3>
+      <p class="mono" style="font-size:13px">45 closed · 10 solved · 7 open</p>
+    </div>
+    <div>
+      <h3>⚠ Contaminação conhecida (junho)</h3>
+      <p style="font-size:13.5px">A assinatura por tags não separa esta anomalia da <strong>Anomalia 03 (formulário nativo)</strong> quando o ticket fechou sem tags: os 4 exemplos de junho do formulário (#2777310, #2775076, #2747334, #2734765) caem aqui no censo. A separação exata (silêncio total × recebeu formulário) exige o conteúdo dos comentários → <strong>Genie BLOCO O</strong> (O1/O2). Referência por conteúdo (sessão anterior): junho-silêncio ≈ 137.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Exemplos para conferência no Zendesk</h2>
+  <h3>Julho (20 mais recentes)</h3>
+  <table class="mono">
+    <tr><th>Ticket</th><th>Criado (UTC)</th><th>Status</th><th>Ticket</th><th>Criado (UTC)</th><th>Status</th></tr>
+    <tr><td>2859006</td><td>22/07 00:02</td><td>open</td><td>2849845</td><td>19/07 17:04</td><td>solved ¹</td></tr>
+    <tr><td>2858201</td><td>21/07 19:20</td><td>open</td><td>2849499</td><td>19/07 16:10</td><td>solved</td></tr>
+    <tr><td>2857149</td><td>21/07 13:40</td><td>open</td><td>2846396</td><td>18/07 19:08</td><td>solved</td></tr>
+    <tr><td>2856012</td><td>21/07 01:22</td><td>open</td><td>2846334</td><td>18/07 18:45</td><td>solved</td></tr>
+    <tr><td>2855776</td><td>21/07 00:03</td><td>open</td><td>2843045</td><td>17/07 16:42</td><td>solved</td></tr>
+    <tr><td>2853334</td><td>20/07 02:23</td><td>open</td><td>2841261</td><td>16/07 22:48</td><td>solved</td></tr>
+    <tr><td>2852558</td><td>19/07 22:27</td><td>solved</td><td>2839936</td><td>16/07 13:05</td><td>solved</td></tr>
+    <tr><td>2851915</td><td>19/07 21:24</td><td>open</td><td>2837082</td><td>15/07 17:23</td><td>closed</td></tr>
+    <tr><td>2851297</td><td>19/07 19:47</td><td>solved</td><td>2837067</td><td>15/07 17:20</td><td>closed</td></tr>
+    <tr><td>2850923</td><td>19/07 19:03</td><td>solved</td><td>2835534</td><td>15/07 01:40</td><td>closed</td></tr>
+  </table>
+  <p style="font-size:12.5px;color:var(--muted)">¹ subtipo <span class="mono">pai_antigo_meses</span> (ticket anterior de fev/2026, sem relação). Listas completas: <span class="mono">anomalia-02_conversa-nova_2026-06.csv</span> (142) · <span class="mono">anomalia-02_conversa-nova_2026-07.csv</span> (62, inclui 22/07 parcial).</p>
+</section>
+
+<section>
+  <h2>Causa raiz e estado</h2>
+  <div class="warn"><strong>Causa raiz aberta — falha de entrega intermitente</strong> (Widget/Sunshine → AI agent) desde o rollout. Volume pequeno e estável, mas cada caso é um cliente sem resposta alguma. Audit do Zendesk sem achados; sem rastro no Data Export.</div>
+  <h3>Ações</h3>
+  <ul>
+    <li><strong>Escalar como item secundário</strong> no mesmo ticket da Anomalia 01 (o fornecedor verá os dois modos: follow-up ignorado × conversa nova não entregue) — seção própria em <span class="mono">ESCALACAO_FORNECEDOR_anomalia-02-conversa-nova.md</span>.</li>
+    <li><strong>Reconciliar junho</strong> com a Anomalia 03 via Genie BLOCO O (conteúdo dos comentários).</li>
+    <li><strong>Monitorar</strong> junto com a 01 no censo diário (categoria CONVERSA_NOVA).</li>
+  </ul>
+</section>
+
+<footer>Anomalia 02 · Projeto Métricas BOT Betnacional · gerado em 22/07/2026 · censo: API Zendesk read-only + Data Export Ultimate (contagem oficial: Genie/Databricks)</footer>
+</div>
+</body>
+</html>

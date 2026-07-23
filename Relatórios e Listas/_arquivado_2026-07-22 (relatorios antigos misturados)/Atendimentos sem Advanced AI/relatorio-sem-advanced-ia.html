@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório — Atendimentos sem advanced_ia (falha de engajamento do Ultimate)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F7F9;--panel:#FFFFFF;--panel-2:#FAFBFC;
+  --line:rgba(20,30,45,.09);--line-strong:rgba(20,30,45,.2);
+  --ink:#18212E;--mut:#556172;--faint:#8792A2;
+  --green:#0B8F63;--green-dim:rgba(11,143,99,.09);
+  --red:#D23B31;--red-dim:rgba(210,59,49,.08);
+  --amber:#B26A08;--amber-dim:rgba(178,106,8,.10);
+  --blue:#1F66D0;--blue-dim:rgba(31,102,208,.08);
+  --sans:"Inter","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono","Cascadia Mono",Consolas,monospace;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.56;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:clamp(24px,4vw,56px) clamp(18px,3vw,44px) 80px}
+.mark{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--red);font-weight:600}
+h1{font-family:var(--sans);font-weight:700;font-size:clamp(30px,3.4vw,44px);line-height:1.08;letter-spacing:-.015em;margin-top:8px}
+h1 em{font-style:italic;color:var(--red)}
+.lead{color:var(--mut);max-width:94ch;margin-top:12px;font-size:1.02em}
+.lead b{color:var(--ink);font-weight:600}
+.metaline{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:14px;letter-spacing:.03em;line-height:1.8}
+code{font-family:var(--mono);font-size:.85em;color:var(--blue);background:var(--blue-dim);padding:1px 6px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);box-shadow:var(--shadow);margin-top:30px}
+.kpi{background:var(--panel);padding:18px 20px 15px;position:relative}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--kc,var(--green))}
+.kpi .lab{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.kpi .val{font-family:var(--sans);font-weight:600;font-size:clamp(24px,2vw,32px);line-height:1.1;margin-top:6px;color:var(--kc,var(--green));font-variant-numeric:tabular-nums}
+.kpi .ctx{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:5px;line-height:1.5}
+.shead{display:flex;align-items:baseline;gap:16px;border-bottom:2px solid var(--line-strong);padding-bottom:11px;margin:52px 0 22px;flex-wrap:wrap}
+.shead h2{font-family:var(--sans);font-weight:600;font-size:clamp(20px,2.2vw,27px);letter-spacing:-.01em}
+.shead .n{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+.shead .num{font-family:var(--mono);font-size:12px;color:var(--red);font-weight:600}
+p.tx{margin:14px 0;max-width:96ch;color:var(--ink)}
+p.tx.mut{color:var(--mut)}
+.panel{background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
+.panel.pad{padding:clamp(18px,2vw,26px)}
+table{width:100%;border-collapse:collapse;font-size:.9em}
+thead th{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);text-align:left;padding:11px 14px;border-bottom:1px solid var(--line-strong);vertical-align:bottom}
+tbody td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody td.r{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+tbody tr:last-child td{border-bottom:none}
+.mono{font-family:var(--mono)}
+.tagpill{font-family:var(--mono);font-size:9px;letter-spacing:.05em;padding:2px 7px;border-radius:20px;white-space:nowrap}
+.p1{color:var(--red);background:var(--red-dim)}
+.p2{color:var(--amber);background:var(--amber-dim)}
+.ok{color:var(--green);background:var(--green-dim)}
+.insight{border-left:3px solid var(--blue);padding:15px 20px;font-size:.94em;color:var(--mut);background:var(--panel);border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:var(--shadow);margin:16px 0}
+.insight.red{border-left-color:var(--red)}
+.insight.amber{border-left-color:var(--amber)}
+.insight b{color:var(--ink)}
+ul.rec{list-style:none;margin:8px 0;display:grid;gap:10px}
+ul.rec li{padding-left:30px;position:relative;color:var(--ink)}
+ul.rec li::before{content:attr(data-n);position:absolute;left:0;top:1px;font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;background:var(--red);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+ul.rec li b{font-weight:600}
+.tl{width:100%;height:auto;display:block;margin-top:6px}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:12px;font-family:var(--mono);font-size:10.5px;color:var(--mut)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--faint);line-height:1.8}
+.caption{font-size:.85em;color:var(--mut);margin-top:12px;max-width:110ch}
+.caption b{color:var(--ink)}
+.ex{font-family:var(--mono);font-size:.85em;color:var(--blue)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mark">● BOT BETNACIONAL · ULTIMATE AI · RELATÓRIO DE INCIDENTE</div>
+  <h1>Atendimentos <em>sem advanced_ia</em></h1>
+  <p class="lead">Clientes cujas conversas de chat <b>não foram engajadas pelo Advanced AI (Ultimate)</b> — não recebem o <code>welcome_entrada</code> nem a tag <code>advanced_ia</code>. Dois padrões distintos, mesma raiz: <b>o AI agent intermitentemente não assume a conversa</b>. Um deles é uma <b>regressão nova, iniciada em 29/jun/2026</b>, ativa e crescente.</p>
+  <div class="metaline">
+    Escopo: canal Native Messaging · marca Bet Nacional · desde o rollout do Ultimate (21/05/2026)<br>
+    Fonte: API Zendesk (somente leitura) · listas em <code>integracao/lista_orfaos_p1_*.csv</code> · base created_at (UTC)<br>
+    Emitido: 22/07/2026 · Status: causa afunilada ao lado Ultimate/Sunshine — pendente de escalação ao fornecedor
+  </div>
+
+  <div class="kpis">
+    <div class="kpi" style="--kc:var(--red)"><div class="lab">P1 — sem interação (total)</div><div class="val">1.907</div><div class="ctx">desde 21/05 · 181 abertos agora</div></div>
+    <div class="kpi" style="--kc:var(--red)"><div class="lab">Início da regressão</div><div class="val">29/jun</div><div class="ctx">salto 8× que não voltou</div></div>
+    <div class="kpi" style="--kc:var(--amber)"><div class="lab">Ritmo atual (P1)</div><div class="val">~40/dia</div><div class="ctx">clientes sem resposta</div></div>
+    <div class="kpi" style="--kc:var(--amber)"><div class="lab">P2 — bot nativo/form</div><div class="val">~49.790</div><div class="ctx">maioria pré-Ultimate (mai)</div></div>
+    <div class="kpi" style="--kc:var(--blue)"><div class="lab">Causa no Zendesk?</div><div class="val">Não</div><div class="ctx">audit descartou · é Ultimate</div></div>
+  </div>
+
+  <div class="shead"><h2>1 · Sumário executivo</h2></div>
+  <p class="tx">Desde o rollout do Advanced AI (21/05/2026), parte das conversas de chat <b>não é roteada ao Ultimate</b>. Quando isso acontece, o cliente cai em um de dois desfechos, ambos <b>sem a tag <code>advanced_ia</code></b>:</p>
+  <p class="tx"><b>P1 — "sem interação" (a regressão).</b> O cliente envia uma mensagem e <b>o bot nunca responde</b>. O ticket é criado na marca Bet Nacional, atribuído ao usuário técnico <code>AI Agent</code>, <b>sem grupo</b>, e fica <b>aberto</b> até uma automação fechá-lo. São <b>1.907 casos desde 21/05</b>, mas o comportamento <b>saltou 8× em 29/jun</b> (de ~7/dia para ~40/dia) e segue ativo — hoje há <b>181 abertos</b>.</p>
+  <p class="tx"><b>P2 — "bot nativo + formulário" (antigo).</b> O cliente recebe o responder <b>nativo do Zendesk</b> ("Olá! Fale mais sobre você…" + um formulário de Nome/E-mail + "Nossa equipe entrará em contato") e é encaminhado a um agente humano. São <b>~49.790</b> no total, a maioria de <b>maio, antes do Ultimate</b>; segue como resíduo (~600–1.600/mês). O roteamento é <b>intermitente</b>: o mesmo cliente já foi visto caindo ora no Ultimate, ora no bot nativo.</p>
+  <div class="insight red"><b>A conclusão para o chamado:</b> os dados descartam qualquer mudança de configuração do <b>Zendesk</b> como causa da regressão de 29/jun (o audit da conta foi verificado). A falha está no <b>engajamento do AI agent do Ultimate</b> — provável mudança de config/release da plataforma em ~29/jun, que não é registrada no audit do Zendesk.</p></div>
+
+  <div class="shead"><h2>2 · Os dois padrões</h2><div class="n">ambos sem advanced_ia / welcome_entrada</div></div>
+  <div class="panel" style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Característica</th><th>P1 — sem interação</th><th>P2 — bot nativo + form</th></tr></thead>
+      <tbody>
+        <tr><td>Resposta ao cliente</td><td><b style="color:var(--red)">Nenhuma</b> (silêncio total)</td><td>Responder nativo + formulário</td></tr>
+        <tr><td>Chega a um humano?</td><td>Não — fica aberto/abandonado</td><td>Sim (assignee humano, fecha)</td></tr>
+        <tr><td>Marca</td><td>Bet Nacional</td><td>Bet Nacional</td></tr>
+        <tr><td>Assignee</td><td><code>AI Agent</code> (50032929128731), sem grupo</td><td>Agente humano</td></tr>
+        <tr><td>Tags típicas</td><td>só <code>intent__*</code> (ou nenhuma)</td><td>macros <code>1.x</code> + categoria</td></tr>
+        <tr><td>Volume</td><td><b>1.907</b> desde 21/05 · 181 abertos</td><td><b>~49.790</b> (maioria mai pré-Ultimate)</td></tr>
+        <tr><td>Início / natureza</td><td><span class="tagpill p1">regressão 29/jun</span> nova e ativa</td><td><span class="tagpill p2">antigo</span> resíduo contínuo</td></tr>
+        <tr><td>Exemplos (ticket_id)</td><td class="ex">2854009, 2853794, 2853943, 2854732, 2855265</td><td class="ex">2804486, 2806230, 2810888, 2809525</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="caption"><b>Nota:</b> a tag <code>1.0_olá</code> é a <b>macro de saudação</b> (aplicada ao atender, em qualquer contexto) — não distingue os padrões e não indica "bot antigo". O discriminador real do P1 é o campo <code>support_type = AI Agent</code> com status aberto e sem <code>advanced_ia</code>.</p>
+
+  <div class="shead"><h2>3 · Linha do tempo — a regressão de 29/jun</h2><div class="n">P1 · órfãos/dia · created_at</div></div>
+  <div class="panel pad">
+    <svg id="tl" class="tl" viewBox="0 0 980 300" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="legend">
+      <span><i style="background:var(--faint)"></i> 21/mai (rollout, transição)</span>
+      <span><i style="background:var(--green)"></i> residual (~7/dia)</span>
+      <span><i style="background:var(--red)"></i> regressão (desde 29/jun, ~40/dia)</span>
+    </div>
+    <p class="caption"><b>Três regimes:</b> 21/mai = 528 (dia do rollout). De 22/mai a 28/jun, residual estável em ~7/dia (Ultimate funcionando). Em <b>29/jun o volume salta 8×</b> (28=5 → 29=41 → 30=58 → 01/jul=63) e nunca volta — ~30–70/dia por todo julho. Acúmulo de <b>~1.100 órfãos de excesso</b> desde 29/jun. (O "17/jul" que apareceu antes era artefato do snapshot de abertos; o real é 29/jun.)</p>
+  </div>
+  <div class="insight amber"><b>Duas mudanças distintas, não confundir:</b> <b>~29/jun</b> = o salto de volume (a regressão real). <b>~20/jul</b> = ligaram a auto-classificação <code>intent__/language__</code> no canal (cosmético) — por isso os órfãos recentes têm tags de intent e os anteriores são "bare".</p></div>
+
+  <div class="shead"><h2>4 · Causa raiz</h2><div class="n">audit do Zendesk verificado</div></div>
+  <p class="tx">A inspeção dos tickets confirma que, no P1, <b>o AI agent recebe a conversa mas não a processa</b>: há exatamente <b>1 comentário (do cliente) e nenhuma resposta do bot</b>. Não é desistência do cliente nem falta de agente humano — é o Ultimate não assumir a conversa.</p>
+  <p class="tx">Para localizar o que mudou em 29/jun, foi lido o <b>Audit Log da conta Zendesk</b> (janela 24/jun–02/jul):</p>
+  <div class="panel pad">
+    <p class="tx" style="margin-top:0"><b style="color:var(--green)">Resultado: nenhuma mudança de configuração do Zendesk explica o salto.</b> As alterações da janela são de outra natureza: montagem do fluxo de Fraude/Conversas Paralelas (24/jun), edições rotineiras de macros e de campo, e exclusão de views antigas (02/jul). <b>Zero</b> mudança em trigger de roteamento, app/integração, webhook ou target ligada ao AI agent / Native Messaging perto de 29/jun.</p>
+  </div>
+  <div class="insight red"><b>Portanto a causa está no lado Ultimate/Sunshine</b> (config interna do AI agent ou release da plataforma em ~29/jun), que <b>não é registrado no audit do Zendesk</b>. É o ponto a confirmar no changelog do Ultimate e a levar ao fornecedor.</p></div>
+
+  <div class="shead"><h2>5 · Impacto</h2></div>
+  <p class="tx"><b>P1:</b> desde 29/jun, ~40 clientes/dia enviam uma mensagem e recebem <b>silêncio</b>, com o ticket aberto indefinidamente na marca humana. São clientes reais com pedidos variados (saudação, "como apostar", "não recebi minha aposta", problemas de cadastro/login, pedido de atendente). <b>181 estão abertos agora</b> — recuperáveis (basta reabordar). Total de 1.907 desde o rollout.</p>
+  <p class="tx"><b>P2:</b> ~600–1.600/mês continuam caindo no bot nativo em vez do Ultimate. Funciona (vão a um humano via formulário), mas <b>contornam o produto</b> — sem métricas do Advanced, sem os fluxos, e criam um formulário que nenhum fluxo do Advanced deveria ter.</p>
+
+  <div class="shead"><h2>6 · Recomendações</h2></div>
+  <ul class="rec">
+    <li data-n="1"><b>Confirmar o que mudou em ~29/jun</b> no changelog/histórico do próprio <b>Ultimate</b> (dashboard do AI agent) — é onde está o gatilho da regressão.</li>
+    <li data-n="2"><b>Abrir chamado com Ultimate/Zendesk</b> com: a data (29/jun→), o padrão ("conversa recebida, AI agent não responde, ticket aberto atribuído ao AI Agent") e a lista dos 1.907 (<code>lista_orfaos_p1_desde_rollout.csv</code>).</li>
+    <li data-n="3"><b>Recuperar os 181 abertos</b> — reabordagem imediata dos clientes sem resposta (a lista serve para ação).</li>
+    <li data-n="4"><b>Monitoramento:</b> criar um papel de leitura que enxergue tickets abertos (o Light Agent atual não vê) e acompanhar a fila "🤖 Tickets Abertos - BOT" com KPI <b>sem advanced_ia → 0</b>.</li>
+    <li data-n="5"><b>Investigar o P2</b> (roteamento intermitente) junto ao fornecedor — por que conversas caem no responder nativo em vez do Ultimate.</li>
+  </ul>
+
+  <div class="shead"><h2>7 · Metodologia e limitações</h2></div>
+  <p class="tx mut"><b>Somente leitura.</b> Toda a coleta foi via <code>GET</code> na API do Zendesk — nenhuma escrita. Nenhum dado de cliente foi salvo; as listas contêm apenas metadados (<code>ticket_id</code>, <code>created_at</code>, status, marca).</p>
+  <p class="tx mut"><b>Limitações conhecidas:</b> a Search API deste tenant não faz AND de múltiplas tags nem filtro de data confiável (contagens via <code>/search/export</code> + filtro local); o Zendesk grava todas as tags na materialização do ticket, então a <b>ordem intra-conversa</b> vive apenas no Ultimate/Sunshine; e o papel Light Agent não lê tickets <b>abertos</b> — os órfãos abertos só foram lidos com credencial de admin (leitura). <b>A fila</b> desses tickets é a view <b>"🤖 Tickets Abertos - BOT"</b> (id 50033879819291), definida por <code>status=open</code> + <code>support_type=AI Agent</code> + marca.</p>
+  <p class="caption"><b>Listas geradas:</b> <code>lista_orfaos_p1_desde_rollout.csv</code> (1.907 · P1 desde o rollout) · <code>lista_orfaos_p1_abertos.csv</code> (181 abertos) · <code>lista_orfaos_p1_fechados.csv</code> (fechados). Números provisórios da API; o oficial vem do Databricks.</p>
+
+  <div class="foot">
+    BOT Betnacional · Ultimate AI — Relatório "sem advanced_ia" · 22/07/2026<br>
+    Rastreabilidade total · números exatos · somente leitura · nenhum dado de cliente persistido
+  </div>
+</div>
+<script>
+/* órfãos P1 por dia (21/mai → 21/jul), created_at UTC */
+const TL=[["05-21",528],["05-22",17],["05-23",43],["05-24",83],["05-25",14],["05-26",9],["05-27",5],["05-28",11],["05-29",6],["05-30",10],["05-31",6],["06-01",5],["06-02",5],["06-03",4],["06-04",1],["06-05",2],["06-06",6],["06-07",4],["06-08",3],["06-09",3],["06-10",2],["06-11",23],["06-12",4],["06-13",6],["06-14",1],["06-15",7],["06-16",9],["06-17",10],["06-18",9],["06-19",10],["06-20",13],["06-21",3],["06-22",5],["06-23",5],["06-24",8],["06-25",5],["06-26",2],["06-27",4],["06-28",5],["06-29",41],["06-30",58],["07-01",63],["07-02",56],["07-03",58],["07-04",70],["07-05",69],["07-06",44],["07-07",50],["07-08",35],["07-09",32],["07-10",29],["07-11",38],["07-12",47],["07-13",28],["07-14",35],["07-15",40],["07-16",29],["07-17",20],["07-18",28],["07-19",56],["07-20",25],["07-21",60]];
+(function(){
+  const W=980,H=300,padL=44,padR=14,padT=16,padB=54;
+  const pw=W-padL-padR, ph=H-padT-padB;
+  const max=Math.max(...TL.map(d=>d[1]));
+  const bw=pw/TL.length;
+  const css=getComputedStyle(document.documentElement);
+  const C={faint:css.getPropertyValue('--faint'),green:css.getPropertyValue('--green'),red:css.getPropertyValue('--red'),line:css.getPropertyValue('--line'),mut:css.getPropertyValue('--mut')};
+  let g='';
+  [0,20,40,60].forEach(v=>{const y=padT+ph-(v/max)*ph;g+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="${C.line}"/><text x="${padL-8}" y="${y+3}" text-anchor="end" font-family="var(--mono)" font-size="10" fill="${C.faint}">${v}</text>`;});
+  TL.forEach((d,i)=>{
+    const h=(d[1]/max)*ph, x=padL+i*bw, y=padT+ph-h;
+    const col = d[0]==="05-21" ? C.faint : (d[0]>="06-29" ? C.red : C.green);
+    g+=`<rect x="${x+1}" y="${y}" width="${bw-2}" height="${h}" fill="${col}" fill-opacity=".85"><title>${d[0]}: ${d[1]}</title></rect>`;
+    if(["05-21","06-11","06-29","07-04"].includes(d[0]))
+      g+=`<text x="${x+bw/2}" y="${y-4}" text-anchor="middle" font-family="var(--mono)" font-size="9.5" font-weight="600" fill="${col}">${d[1]}</text>`;
+  });
+  ["05-21","06-01","06-15","06-29","07-10","07-21"].forEach(lbl=>{
+    const i=TL.findIndex(d=>d[0]===lbl); if(i<0)return;
+    g+=`<text x="${padL+i*bw+bw/2}" y="${H-30}" text-anchor="middle" font-family="var(--mono)" font-size="9.5" fill="${C.mut}">${lbl.replace('-','/')}</text>`;
+  });
+  const xj=padL+TL.findIndex(d=>d[0]==="06-29")*bw;
+  g+=`<line x1="${xj}" y1="${padT}" x2="${xj}" y2="${padT+ph}" stroke="${C.red}" stroke-dasharray="3 3" stroke-width="1.2"/>`;
+  g+=`<text x="${xj+4}" y="${padT+11}" font-family="var(--mono)" font-size="10" font-weight="600" fill="${C.red}">29/jun — regressão</text>`;
+  document.getElementById('tl').innerHTML=g;
+})();
+</script>
+</body>
+</html>

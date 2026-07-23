@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anomalia 03 — Formulário nativo ("A form was sent") · BOT Betnacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1a2332; --muted:#5b6b7f; --line:#e3e8ef; --bg:#f7f9fc; --card:#ffffff;
+    --red:#c0392b; --red-bg:#fdf0ee; --amber:#9a6700; --amber-bg:#fff8e6;
+    --green:#1a7f4b; --green-bg:#eafaf1; --blue:#1f5fbf; --blue-bg:#eef4fd;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding:32px 16px}
+  .wrap{max-width:980px;margin:0 auto}
+  .mono{font-family:'IBM Plex Mono',Consolas,monospace}
+  header{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:28px 32px;margin-bottom:16px}
+  h1{font-size:22px;font-weight:800;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:13px;margin-top:6px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:.05em;margin-right:6px}
+  .b-amber{background:var(--amber-bg);color:var(--amber)}
+  .b-green{background:var(--green-bg);color:var(--green)}
+  .b-red{background:var(--red-bg);color:var(--red)}
+  .b-blue{background:var(--blue-bg);color:var(--blue)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px 32px;margin-bottom:16px}
+  h2{font-size:15px;font-weight:700;margin-bottom:12px;letter-spacing:-.01em}
+  h3{font-size:13px;font-weight:700;margin:16px 0 8px}
+  p{font-size:14px;margin-bottom:10px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+  .kpi{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--bg)}
+  .kpi .v{font-family:'IBM Plex Mono',Consolas,monospace;font-size:26px;font-weight:600;letter-spacing:-.02em}
+  .kpi .l{font-size:11.5px;color:var(--muted);margin-top:2px}
+  ol,ul{padding-left:22px;font-size:14px}
+  li{margin-bottom:6px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--line)}
+  td{padding:7px 10px;border-bottom:1px solid var(--line)}
+  td.mono, .mono td{font-family:'IBM Plex Mono',Consolas,monospace;font-size:12.5px}
+  .note{border-left:3px solid var(--blue);background:var(--blue-bg);padding:12px 16px;border-radius:0 8px 8px 0;font-size:13.5px;margin:12px 0}
+  .warn{border-left:3px solid var(--amber);background:var(--amber-bg);padding:12px 16px;border-radius:0 8px 8px 0;font-size:13.5px;margin:12px 0}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="badge b-red">ATIVA — ~30/dia em julho</span>
+  <span class="badge b-blue">Respondedor identificado: fluxo padrão nativo do Messaging</span>
+  <h1>Anomalia 03 — Formulário nativo indevido ("A form was sent")</h1>
+  <div class="sub">Em vez do AI agent, quem responde é o <strong>fluxo de resposta PADRÃO do Zendesk Messaging</strong>: "Olá! Fale mais sobre você e como podemos ajudar." + formulário. Se o cliente preenche, vai para o atendimento humano ("Nossa equipe entrará em contato…"); se não preenche, o ticket morre sem atendimento. <strong>Nenhum fluxo do Ultimate contém esse formulário.</strong><br>
+  Atualizado em 22/07/2026 · Fonte: Genie Zendesk (O1) + API Zendesk (read-only) + exemplos do Dono · Projeto Métricas BOT Betnacional</div>
+</header>
+
+<section>
+  <h2>Mecânica e variantes</h2>
+  <ol>
+    <li>Cliente escreve no widget; a conversa <strong>não é entregue ao AI agent</strong> (mesma raiz provável das anomalias 01/02).</li>
+    <li>Cai no <strong>fluxo de resposta padrão nativo do Zendesk Messaging</strong>: mensagem "Olá! Fale mais sobre você…" + <span class="mono">A form was sent</span> (Nome/E-mail — formulário que não existe em nenhum fluxo nosso). <em>Identificação (API, 22/07): a mensagem chega num comentário de <strong>autor −1 (sistema)</strong> via canal <span class="mono">chat_transcript</span> — não há usuário-bot; é a resposta padrão do canal, configurada no Admin → Canais → Mensagens.</em></li>
+    <li><strong>Se preenche:</strong> "Agradecemos sua paciência. Nossa equipe entrará em contato em breve…" → transferido ao humano (com comunicação confusa, mas atendido).</li>
+    <li><strong>Se não preenche:</strong> o ticket morre ali, sem atendimento.</li>
+  </ol>
+  <h3>Variantes documentadas (exemplos do Dono, 22/07)</h3>
+  <table class="mono">
+    <tr><th>Ticket</th><th>Época</th><th>Variante</th></tr>
+    <tr><td>2777310 · 2775076 · 2747334 · 2734765</td><td>jun</td><td>padrão: form → morreu ou foi a humano</td></tr>
+    <tr><td>2817850</td><td>jul</td><td>inicia com form de CPF <em>já preenchido</em> (retomado de outro ticket); depois "A form was sent" + transferência OK</td></tr>
+    <tr><td>2594575</td><td>mai</td><td>variante "24 horas" — sem histórico anterior do cliente</td></tr>
+    <tr><td>2595080</td><td>mai</td><td>variante "24 horas / clique no botão" = o fluxo padrão PRÉ-rollout do canal (15.102 em 01–21/05; 113 residual em 22–31/05; <strong>0 desde junho — EXTINTA</strong>, O1b)</td></tr>
+  </table>
+  <div class="note"><strong>Relação com as outras anomalias (fechada em 22/07):</strong> verificamos o ticket-pai de <strong>8 exemplos (jun + jul, incluindo #2817850): TODOS são conversa nova</strong> — nenhum é follow-up. A An. 03 é <strong>paralela e independente</strong> da An. 01 (follow-up): atinge conversas novas que não chegam ao AI agent e caem na resposta padrão do canal. E ela <strong>NÃO cessou em 29/06</strong> — segue em ~30/dia em julho (Genie O1). A hipótese antiga "o formulário virou silêncio em 29/06" cai: os três modos coexistem — conversa nova → form (An. 03, ~30/dia) · conversa nova → nada (An. 02, ~3/dia) · follow-up → nada (An. 01, ~40/dia, desde 29/06).</div>
+</section>
+
+<section>
+  <h2>Números (Genie O1 + O1b, respondidas em 22–23/07 — busca por conteúdo dos comentários)</h2>
+  <div class="kpis">
+    <div class="kpi"><div class="v">655</div><div class="l">JULHO 01–22 — ~30/dia (pico 51 em 01/07, mín 10 em 13/07) — ATIVA</div></div>
+    <div class="kpi"><div class="v">1.574</div><div class="l">JUNHO — ~52/dia (30–108/dia; SEM quebra em 29/06: dia 29 = 38)</div></div>
+    <div class="kpi"><div class="v">426</div><div class="l">MAIO 22–31 (pós-rollout, ~43/dia) — o vazamento NASCE com o rollout: pré-rollout = 0</div></div>
+    <div class="kpi"><div class="v">99,98%</div><div class="l">com assignee HUMANO — o form roteia para gente</div></div>
+  </div>
+  <p style="font-size:13.5px">Universo Genie: <span class="mono">native_messaging</span> + sem <span class="mono">advanced_ia</span> + comentários com as frases do formulário, brand Bet Nacional, mai–jul (created_at UTC). Status ~100% closed.</p>
+  <div class="ok"><strong>Contagem validada por frase (O1b, 23/07):</strong> os totais de junho (1.574) e julho (655) são <strong>100% da frase "Fale mais sobre você"</strong> — "Nossa equipe entrará em contato" deu 1 caso em maio e zero depois → <strong>sem inflação por macros humanas</strong>. A frase "Fale mais sobre você" não existia antes de 22/05 (0 no pré-rollout) e aparece a ~43/dia desde então: <strong>o vazamento para a resposta padrão nasceu junto com o rollout do Advanced e nunca parou</strong>. Série de junho sem quebra em 29/06 (30–108/dia; picos 13/06=100, 20/06=108) → independente da regressão da An. 01.</div>
+  <div class="warn"><strong>Ressalva de medição que permanece:</strong> <strong>o lake NÃO enxerga o subgrupo que morre sem preencher</strong>: nossos exemplos com assignee "AI Agent" (#2777310, #2775076…) têm a frase no transcript via API, mas o Genie encontrou <strong>0</strong> tickets com esse assignee — e <strong>"A form was sent" deu 0 em TODOS os meses</strong> (o evento do formulário não vai para os comentários do lake). Esse subgrupo só é medível pela API → lista parcial de 182 (22/05→jun).</div>
+  <h3>Reconciliação dos dois subgrupos</h3>
+  <table>
+    <tr><th>Subgrupo</th><th>Assinatura</th><th>Fonte</th><th>Volume</th></tr>
+    <tr><td>Preencheu o form → <strong>atendido por humano via chat</strong> ✅</td><td>assignee humano, 5–12 tags de macro</td><td>Genie O1 + verificação API</td><td class="mono">jun 1.574 · jul 655 (~quase tudo)</td></tr>
+    <tr><td>Não preencheu → morreu sem atendimento</td><td>assignee "AI Agent", ≤1 tag</td><td>só API (lake não vê)</td><td class="mono">182 parcial (22/05→jun); julho a medir</td></tr>
+  </table>
+  <div class="ok"><strong>Atendimento humano CONFIRMADO pela API (23/07) — e O2 do Genie refutada.</strong> O Genie respondeu que 99,7% não tinham atendimento humano (8/2.655 com comentário de <span class="mono">author_id&gt;0</span>). O teste é <strong>estruturalmente cego</strong>: em messaging, a fala do agente fica <em>dentro</em> do <span class="mono">chat_transcript</span> (autor −1) — nunca vira comentário próprio; <span class="mono">author_id&gt;0</span> só captura notas internas privadas. Análise dos <strong>locutores do transcript</strong> em 15 tickets dos 3 grupos (com/sem atendimento segundo o Genie + exemplos O1): <strong>15/15 têm falas de agente humano</strong> — incluindo os "sem atendimento" (#2596495: 12 falas de agente). Regra de método: "houve resposta humana?" em messaging só se responde via API + locutores (<span class="mono">integracao/analisar_locutores_transcript.py</span>).</div>
+  <div class="ok"><strong>Configuração confirmada na tela (Dono, 23/07):</strong> em Admin → Canais → Mensagens, o canal "Betnacional" exibe como resposta padrão <em>exatamente</em> o fluxo desta anomalia ("Olá! Fale mais sobre você…" + form Nome/E-mail + "Agradecemos sua paciência… entraremos em contato por e-mail"). O botão "Testar agora" abre o widget com o <strong>Menu do AI agent funcionando</strong> — ou seja: quando o AI agent engaja, o cliente vê o Menu; quando NÃO engaja, o canal serve a resposta padrão (o form). A config está coerente; o problema é a fração de conversas (~30/dia) que não é entregue ao AI agent.</div>
+</section>
+
+<section>
+  <h2>Exemplos, listas e ações</h2>
+  <h3>Exemplos para conferência no Zendesk</h3>
+  <table class="mono">
+    <tr><th>Ticket</th><th>Criado (UTC)</th><th>Subgrupo</th><th>Origem</th></tr>
+    <tr><td>2777549 · 2777679 · 2777726 · 2777745 · 2778691</td><td>01/07</td><td>roteado a humano</td><td>Genie O1 (conversa nova, 5/5 sem pai)</td></tr>
+    <tr><td>2817850</td><td>09/07 21:56</td><td>roteado a humano (form CPF "retomado")</td><td>Dono (sem pai — o CPF pré-preenchido não vem de outro ticket do requester)</td></tr>
+    <tr><td>2626855 · 2627205 · 2627332</td><td>01/06</td><td>roteado a humano</td><td>Genie O1</td></tr>
+    <tr><td>2777310 · 2775076</td><td>30/06</td><td>morreu sem preencher (assignee AI Agent)</td><td>Dono</td></tr>
+    <tr><td>2595080 · 2594575 · 2574512</td><td>mai</td><td>variante "24 horas / clique no botão"</td><td>Dono + lista parcial</td></tr>
+  </table>
+  <p style="font-size:13px">Listas (metadados, sem PII): <span class="mono">anomalia-03_formulario_parcial_{2026-05,2026-06,TODOS}.csv</span> (182 — subgrupo "morreu sem preencher", validado por conteúdo nos fechados).</p>
+  <h3>Ações</h3>
+  <ul>
+    <li><strong>Genie:</strong> ✅ Bloco O concluído (O1 ✓ · O1b ✓ · O2 refutada via API · O3 desnecessária — variante extinta).</li>
+    <li><strong>Admin:</strong> ✅ resposta padrão do canal conferida pelo Dono (print 23/07) — é o form; config coerente, sem ação.</li>
+    <li><strong>Escalação:</strong> anexar esta anomalia como evidência na escalação das An. 01/02 (mesma raiz de entrega: conversa nova que não chega ao AI agent; aqui o fallback nativo captura).</li>
+    <li><strong>Medir o subgrupo "morreu sem preencher" de julho</strong> via API (conteúdo dos fechados da An. 02/censo).</li>
+  </ul>
+</section>
+
+<footer>Anomalia 03 · Projeto Métricas BOT Betnacional · gerado em 22/07/2026 · aguardando Genie Zendesk (BLOCO O) para números finais</footer>
+</div>
+</body>
+</html>

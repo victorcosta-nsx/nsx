@@ -1,0 +1,48 @@
+*🤖 BOT Betnacional — Anomalias de atendimento no canal de chat*
+_Resumo executivo · reunião com Zendesk (AI agents - Advanced) · 24/07/2026_
+_Detalhes, evidências e listas de tickets: nos relatórios em anexo_
+
+*Ambiente:* subdomínio nsxhelp · bot "nsxhelp-chat" · Web Widget (Messaging/Sunshine)
+
+━━━━━━━━━━━━━━━━━━
+
+*1️⃣ 🔴 PRINCIPAL — Cliente escreve após o fim do atendimento e ninguém responde*
+
+O cliente é atendido pelo bot do início ao fim (inclusive responde a pesquisa de satisfação), o ticket fecha — e quando ele envia mais uma mensagem *segundos depois* (um "obrigado" ou um problema novo), abre-se um novo ticket que fica *sem qualquer resposta*: nem bot, nem humano. O ticket é fechado depois por automação, sem ninguém ver.
+
+• Começou em *29/06*, de um dia para o outro: 0 → 36 → 52 → 62 casos/dia
+• *905 clientes afetados* de 29/06 a 21/07 (~39/dia) — *segue ativo*
+• 92,7% tinham acabado de responder a pesquisa BSAT; intervalo mediano de *15 segundos* entre o fechamento e a nova mensagem
+• Auditoria interna: *nenhuma mudança de configuração do nosso lado* (audit log revisado)
+• Data Export do bot: a nova mensagem *não gera nenhum evento no motor* — o bot nunca fica sabendo
+• Até 28/06 o comportamento era o correto: nova mensagem → bot reengajava com o menu inicial (~1 falha/dia)
+
+*Pedidos à Zendesk:* changelog da plataforma em 28–30/06 · logs de entrega das conversas dos tickets-exemplo · confirmação do comportamento esperado e correção do reengajamento pós-encerramento.
+
+━━━━━━━━━━━━━━━━━━
+
+*2️⃣ 🟡 Conversa nova que não recebe nenhuma resposta*
+
+Cliente sem atendimento recente abre uma conversa e não recebe nada — a conversa *nunca chega ao motor do bot* (sem rastro no Data Export). ~3 casos/dia, constante desde o rollout (21/05). Volume menor, mas é a mesma ponte de entrega Widget → AI agent.
+
+*Pedido:* logs de entrega dos exemplos + explicação de por que o ticket é criado e atribuído ao bot sem o bot receber a conversa.
+
+━━━━━━━━━━━━━━━━━━
+
+*3️⃣ 🟡 Conversa cai no formulário nativo em vez do bot*
+
+~30 conversas/dia *não são entregues ao AI agent* e caem na resposta padrão do canal ("Olá! Fale mais sobre você…" + formulário). Quem preenche é atendido por agente humano (custo + fricção, sem passar pelo bot); quem não preenche fica sem atendimento. Ocorre desde o rollout: ~43/dia (mai) → ~52/dia (jun) → ~30/dia (jul). É o mesmo problema de entrega dos itens 1 e 2, com o fallback nativo capturando a conversa.
+
+━━━━━━━━━━━━━━━━━━
+
+*4️⃣ 🟢 Transferência para humano não consumada (residual)*
+
+Cliente pede atendimento humano, completa a coleta de dados, o bot confirma a transferência — e a entrega à fila humana não acontece (exceção técnica no nó de transferência). A conversa cai por inatividade e é indevidamente registrada como resolvida pelo bot.
+
+• Julho: *27 casos*, em mini-rajadas (10 casos em ~2h na noite de 07→08/07) · último caso em 19/07
+• O esperado é *zero* — cada caso novo indica que o defeito ainda ocorre episodicamente
+
+━━━━━━━━━━━━━━━━━━
+
+*Referências do canal:* ~150 mil conversas/mês · retenção do bot 59,59% (junho/26)
+_Todas as contagens são auditáveis e reproduzíveis (API Zendesk + Data Export v3 + Data Lake). Critério de data: created_at em UTC._
